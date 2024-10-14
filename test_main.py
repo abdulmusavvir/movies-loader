@@ -45,9 +45,10 @@ if __name__ == '__main__':
         test_cases.append(TestCase(test.id(), reason, skipped=True))
         
     # Collect successful test cases
-    for test in suite:
-        if test not in [tc.test for tc in test_cases]:  # Avoid duplicates
-            test_cases.append(TestCase(test.id(), None))  # Add as success
+    for test in suite:  # Iterate over the test suite
+        test_id = test.id()  # Get the test id
+        if test_id not in [tc.test_case_id for tc in test_cases]:  # Check for existing cases
+            test_cases.append(TestCase(test_id, None))  # Add as success
 
     junit_xml_path = "reports/test_results.xml"
     with open(junit_xml_path, "w") as f:
