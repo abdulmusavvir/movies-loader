@@ -1,13 +1,10 @@
 FROM python:3.7.3
 
-WORKDIR /app
+WORKDIR /app 
 
-# Install necessary dependencies
-RUN pip install --no-cache-dir junit-xml xmlrunner
+RUN pip install unittest-xml-reporting
 
-# Copy your application code and test data
 COPY test_main.py .
 COPY movies.json .
 
-# Set the command to run your tests
-CMD ["python", "test_main.py"]
+CMD python test_main.py
