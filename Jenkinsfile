@@ -8,16 +8,17 @@ node {
         script {
             def reportDir = "reports"
             
-            // Clean the reports directory, removing old reports
-            sh "rm -rf ${reportDir}/*"  // Clean any old reports
-            
-            // Get the UID and GID of the Jenkins user to avoid root ownership issues
+            // Ensure the reports directory is clean and has correct permissions
+            sh "rm -rf ${reportDir}/*"
+            sh "mkdir -p ${reportDir} && chown -R \$(id -u):\$(id -g) ${reportDir}"
+
+            // Get the UID and GID of the Jenkins user
             def uid = sh(script: "id -u", returnStdout: true).trim()
             def gid = sh(script: "id -g", returnStdout: true).trim()
 
             // Build the Docker image for running tests
             sh "docker build -t ${imageName}-test -f Dockerfile.test ."
-            
+
             // Run the Docker container as the Jenkins user and mount the reports directory
             sh """
             docker run --rm -u ${uid}:${gid} -v ${PWD}/${reportDir}:/app/${reportDir} ${imageName}-test
