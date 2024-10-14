@@ -5,7 +5,7 @@ WORKDIR /app
 # Install junit-xml
 RUN pip install junit-xml
 
-COPY test_main.py .  # Copy the test script
-COPY movies.json .   # Copy the movies JSON file
+COPY test_main.py .
+COPY movies.json .  
 
 CMD python test_main.py  # Run the test script
