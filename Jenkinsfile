@@ -6,22 +6,17 @@ node {
     }
     stage('Unit Test') {
         script {
+            // Use WORKSPACE for Jenkins workspace path instead of $PWD
             def reportDir = "${WORKSPACE}/reports"
             
             // Ensure the reports directory exists
             sh "mkdir -p ${reportDir}"
             
-            // Get the UID and GID of the Jenkins user
-            def uid = sh(script: "id -u", returnStdout: true).trim()
-            def gid = sh(script: "id -g", returnStdout: true).trim()
-
             // Build the Docker image
             sh "docker build -t ${imageName}-test -f Dockerfile.test ."
             
-            // Run the Docker container as the Jenkins user
-            sh """
-            docker run --rm -u ${uid}:${gid} -v ${reportDir}:/app/reports ${imageName}-test
-            """
+            // Run the Docker container and mount the reports directory
+            sh "docker run --rm -v ${reportDir}:/app/reports ${imageName}-test"
             
             // Ensure the reports were generated
             sh "ls -la ${reportDir}"
