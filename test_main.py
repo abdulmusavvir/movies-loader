@@ -38,17 +38,16 @@ if __name__ == '__main__':
 
     # Collect failed test cases
     for test, reason in result.failures:
-        test_cases.append(TestCase(test.id(), reason))
+        test_cases.append(TestCase(test.id, reason))
 
     # Collect skipped test cases
     for test, reason in result.skipped:
-        test_cases.append(TestCase(test.id(), reason, skipped=True))
-        
+        test_cases.append(TestCase(test.id, reason, skipped=True))
+
     # Collect successful test cases
-    for test in result.testsRun:  # Loop over the total tests run
-        test_id = test.id() if test else None  # Ensure test is not None
-        if test_id and not any(tc.test_case_id == test_id for tc in test_cases):  # Check for existing cases
-            test_cases.append(TestCase(test_id, None))  # Add as success
+    for test in suite:  # Loop over the suite to get the test instances
+        if test not in result.failures and test not in result.skipped:
+            test_cases.append(TestCase(test.id, None))  # Add as success
 
     junit_xml_path = "reports/test_results.xml"
     with open(junit_xml_path, "w") as f:
