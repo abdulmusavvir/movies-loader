@@ -1,4 +1,6 @@
 FROM python:latest
 WORKDIR /app
+RUN pip install unittest-xml-reporting
 COPY test_main.py .
 COPY movies.json .
+CMD python test_main.py
