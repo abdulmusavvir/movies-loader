@@ -2,10 +2,12 @@ FROM python:3.7.3
 
 WORKDIR /app
 
-# Install junit-xml
-RUN pip install junit-xml
+# Install necessary dependencies
+RUN pip install --no-cache-dir junit-xml xmlrunner
 
+# Copy your application code and test data
 COPY test_main.py .
-COPY movies.json .  
+COPY movies.json .
 
-CMD python test_main.py  # Run the test script
+# Set the command to run your tests
+CMD ["python", "test_main.py"]
