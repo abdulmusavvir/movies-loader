@@ -5,8 +5,8 @@ node{
     }
     stage('unit test'){
         def imageTest = docker.build("${imageName}-test", "-f Dockerfile.test .")
-         docker.image("${imageName}-test").inside{
-            sh 'python test_main.py'
-        }
+        imageTest.inside {
+        sh 'python test_main.py'
         }
     }
+}
