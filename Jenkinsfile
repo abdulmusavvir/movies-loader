@@ -6,7 +6,7 @@ node {
     }
     stage('Unit Test') {
         script {
-            def reportDir = "${WORKSPACE}/reports"
+            def reportDir = "reports"
             
             // Clean the reports directory, removing old reports
             sh "rm -rf ${reportDir}/*"  // Clean any old reports
@@ -20,7 +20,7 @@ node {
             
             // Run the Docker container as the Jenkins user and mount the reports directory
             sh """
-            docker run --rm -u ${uid}:${gid} -v ${reportDir}:/app/reports ${imageName}-test
+            docker run --rm -u ${uid}:${gid} -v ${PWD}/${reportDir}:/app/${reportDir} ${imageName}-test
             """
 
             // Check the ownership and presence of the test report files
