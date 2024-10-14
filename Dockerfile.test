@@ -1,10 +1,18 @@
+# Use the official Python image as the base
 FROM python:3.7.3
 
-WORKDIR /app 
+# Set the working directory
+WORKDIR /app
 
+# Upgrade pip to the latest version
+RUN pip install --upgrade pip
+
+# Install necessary packages
 RUN pip install unittest-xml-reporting
 
+# Copy the test script and the JSON data file into the container
 COPY test_main.py .
 COPY movies.json .
 
-CMD python test_main.py
+# Command to run the test script
+CMD ["python", "test_main.py"]
