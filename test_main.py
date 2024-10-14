@@ -35,18 +35,19 @@ if __name__ == '__main__':
 
     # Create XML report
     test_cases = []
-    
+
     # Collect failed test cases
     for test, reason in result.failures:
         test_cases.append(TestCase(test.id(), reason))
-    
-    # Collect successful test cases
-    for test in result.skipped:
-        test_cases.append(TestCase(test.id(), None, skipped=True))
+
+    # Collect skipped test cases
+    for test, reason in result.skipped:
+        test_cases.append(TestCase(test.id(), reason, skipped=True))
         
-    for test in result.testsRun:
-        if test not in [tc.test for tc in test_cases]:  # To avoid duplicates
-            test_cases.append(TestCase(test.id(), None))  # Add as success if not failed or skipped
+    # Collect successful test cases
+    for test in suite:
+        if test not in [tc.test for tc in test_cases]:  # Avoid duplicates
+            test_cases.append(TestCase(test.id(), None))  # Add as success
 
     junit_xml_path = "reports/test_results.xml"
     with open(junit_xml_path, "w") as f:
